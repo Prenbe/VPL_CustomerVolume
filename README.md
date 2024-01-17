@@ -14,6 +14,27 @@ ACME HEALTH experienced a change in their FedEx account (from 2002 to 1562) in Q
 ### Supplier Table
 - Contains IDs for VPL's suppliers.
 
+### Additional Data Dictionary
+- **Customer Name:** Customer name who records correspond to
+- **Import_Date:** The date VPL ingested the record into our system
+- **Invoice_Date:** The date the carrier bills VPL
+- **Ship_Date:** The date the package shipped
+- **Package_Direction:** Inbound/Outbound flag. Inbound are packages going to the customer, Outbound as shipments sent from the customer
+- **Shipment_Type:** Small package/LTL flag; Small package is the default shipment, LTL is larger/more expensive shipment(s)
+- **Bill_Status:** Billed/Unbilled Flag; indicates if VPL billed the customer
+- **Carrier_Name:** Carrier responsible for delivery of shipment
+- **Account:** Carrier Account number a shipment is charged to
+- **Invoice_Number:** Number assigned by a carrier to VPL which groups multiple shipments together
+- **Tracking_Number:** Individual shipment ID string. There can be multiple records with the same tracking number, often indicating an additional charge or adjustment assigned by the carrier after the initial billing
+- **Supplier_ID:** Id that links a shipment to the supplier table. Customer buy from suppliers who ship to the customer. Not all suppliers are mapped
+- **Shipper Name:** Name of the shipper on the label (free form text means this can be messy or blank) For Inbound Packages, this is usually associated with the supplier
+- **Shipper Company:** Name of the shipper company on the label (free form text means this can be messy or blank). For inbound packages, this is usually associated with the supplier
+- **Recipient Name:** Name of the shipper on the label (free form text means this can be messy or blank) For outbound packages, this is usually associated with the supplier or is an internal shipment between customer locations
+- **Recipient Company:** Name of the shipper company on the label (free form text means this can be messy or blank) For outbound packages, this is usually associated with the supplier or is an internal shipment between customer locations
+- **Service_Base_Name:** The mode chosen to ship a package. Corresponds to how quickly a shipment is intended to arrive at its destination
+- **Charge_Amt:** Amount billed to the customer by VPL for the shipment
+
+
 ## Questions to Address
 1. What patterns does the data evidence with ACME HEALTH's shipping volume?
 2. What may have caused the change in carrier volume from Q1 2021 to Q2 2022?
