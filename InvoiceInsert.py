@@ -1,12 +1,13 @@
 import mysql.connector
 import pandas as pd
 from tqdm import tqdm
+import numpy as np
 
 # Establish a connection to MySQL database
 conn = mysql.connector.connect(
     host='127.0.0.1',
     user='root',
-    password='',
+    password='PeachBiscuit202$',
     database='vpl'
 )
 
@@ -19,14 +20,11 @@ excel_file_path = "C:\\VPL\\ACME Health Data Challenge.xlsx"
 # Specify the sheet name if your Excel file has multiple sheets
 sheet_name = "Data"  # Change to the actual sheet name
 
-# Specify the encoding when reading the Excel file (optional)
-# encoding = 'utf-8' or other encoding if needed
-
 # Read data from the Excel file
 data = pd.read_excel(excel_file_path, sheet_name=sheet_name)
 
-# Handle 'nan' values by replacing them with None
-data = data.where(pd.notna(data), None)
+# Replace 'nan' values in the DataFrame with a placeholder (e.g., 'N/A')
+data = data.replace({pd.NaT: None, np.nan: None})
 
 # Define the INSERT INTO query
 insert_query = """
@@ -44,7 +42,7 @@ data_tuples = [tuple(row) for row in data.itertuples(index=False)]
 # Batch size for optimization
 batch_size = 1000
 
-# Insert data into ShippingData using executemany with progress bar for each batch
+# Insert data into tblInvoice using executemany with progress bar for each batch
 tqdm_iterator = tqdm(range(0, len(data_tuples), batch_size), desc="Inserting data into tblInvoice", unit="batches")
 for i in tqdm_iterator:
     batch = data_tuples[i:i+batch_size]
