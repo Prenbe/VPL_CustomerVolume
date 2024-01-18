@@ -1,24 +1,34 @@
 import mysql.connector
 import pandas as pd
+from tqdm import tqdm
+import numpy as np
 
 # Establish a connection to MySQL database
 conn = mysql.connector.connect(
-    host='your_mysql_host',
-    user='your_mysql_user',
-    password='your_mysql_password',
-    database='your_mysql_database'
+    host='127.0.0.1',
+    user='root',
+    password='PeachBiscuit202$',
+    database='vpl'
 )
 
 # Create a cursor
 cursor = conn.cursor()
 
 # Read data from CSV file
-csv_file_path = 'path/file.csv'  # Replace CSV file path
-data = pd.read_csv(csv_file_path)
+excel_file_path = "C:\\VPL\\ACME Health Data Challenge.xlsx"
+
+# Specify the sheet name if your Excel file has multiple sheets
+sheet_name = "Data"  # Change to the actual sheet name
+
+# Read data from the Excel file
+data = pd.read_excel(excel_file_path, sheet_name=sheet_name)
+
+# Replace 'nan' values in the DataFrame with a placeholder (e.g., 'N/A')
+data = data.replace({pd.NaT: None, np.nan: None})
 
 # Define the INSERT INTO query
 insert_query = """
-    INSERT INTO ShippingData
+    INSERT INTO tblInvoice
     (Customer_Name, Import_Date, Invoice_Date, Ship_Date, Package_Direction, 
     Shipment_Type, Bill_Status, Carrier_Name, Account, Invoice_Number, Tracking_Number, 
     Supplier_ID, Shipper_Name, Shipper_Company, Recipient_Name, Recipient_Company, 
@@ -29,11 +39,22 @@ insert_query = """
 # Convert DataFrame to list of tuples
 data_tuples = [tuple(row) for row in data.itertuples(index=False)]
 
-# Insert data into tblInvoice using executemany
-cursor.executemany(insert_query, data_tuples)
+# Batch size for optimization
+batch_size = 1000
 
-# Commit the changes
-conn.commit()
+# Insert data into tblInvoice using executemany with progress bar for each batch
+tqdm_iterator = tqdm(range(0, len(data_tuples), batch_size), desc="Inserting data into tblInvoice", unit="batches")
+for i in tqdm_iterator:
+    batch = data_tuples[i:i+batch_size]
+    
+    # Insert batch
+    cursor.executemany(insert_query, batch)
+    
+    # Commit the changes for each batch
+    conn.commit()
+    
+    # Update the progress bar description
+    tqdm_iterator.set_postfix({"Batches Inserted": i // batch_size + 1})
 
 # Close the cursor and connection
 cursor.close()
