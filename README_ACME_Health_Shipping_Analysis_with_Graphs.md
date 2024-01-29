@@ -45,7 +45,7 @@ This analysis provides a comprehensive overview of ACME Health's shipping volume
 ## Graphical Analysis Summaries
 
 ### Top 10 Supplier Volume Changes for ACME HEALTH (Q1 2021 vs. Q1 2022)
-![Top 10 Supplier Volume Changes](supplier_volume_changes.png)
+![Top 10 Supplier Volume Changes](supplier_volume_changes%20(1).png)
 This bar chart illustrates the change in shipment volumes for the top 10 suppliers to ACME HEALTH comparing Q1 of 2021 with Q1 of 2022. Each bar represents a supplier and is identified by the supplier's ID. The length of the bar shows the magnitude of increase or decrease in the number of shipments.
 
 ### Inbound Shipment Volume for FedEx (Before and After Account Change)
